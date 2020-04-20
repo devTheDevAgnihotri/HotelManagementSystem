@@ -12,7 +12,7 @@ hotelRouter.use(bodyParser.json());
 hotelRouter.route('/')
 .get((req,res,next) => {
     hotel.find({})
-    .populate('room.Rooms_Occupied.Room_Allocated')
+    .populate('room.Rooms_Occupied')
     .then((hotel) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');

@@ -3,30 +3,21 @@ require('mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
 
 const Schema = mongoose.Schema;
-const RoomSchema = new Schema({
-    
-    Rooms_Occupied:{ 
-        type:mongoose.Schema.Types.ObjectId, 
-        ref: 'bookings', 
-    },
-    });
 
 const hotelSchema =new Schema({
    Rooms:{
     type:String,
     required:true
    },
-  totalstaff:{
+   totalstaff:{
     type:Number,
-    required:false
+    required:true
    },
    availablestaff:
    {
        type:Number,
        required:true
    },
-   
-   room:[RoomSchema],
 },
 
 {
