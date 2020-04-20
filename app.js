@@ -3,11 +3,24 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session');
+var FileStore = require('session-file-store')(session)
+var passport = require('passport');
+var authenticate = require('./authenticate');
+var config = require('./config');
+const uploadRouter = require('./routes/uploadRouter');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var hotelRouter = require('./routes/hotelRouter');
+var bookingRouter = require('./routes/bookingRouter');
+var dishRouter = require('./routes/dishRouter');
 
 var app = express();
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,9 +31,28 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/imageUpload',uploadRouter);
 
+app.use('/hotel', hotelRouter);
+app.use('/book', bookingRouter);
+app.use('/dishes',dishRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+const mongoose = require('mongoose');
+const Dishes = require('./models/dishes');
+const book = require('./models/booking');
+const hotel = require('./models/hotel')
+
+const url = config.mongoUrl;
+const connect = mongoose.connect(url);
+
+connect.then((db) => {
+  console.log("Connected correctly to server");
+}, (err) => { console.log(err); });
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
