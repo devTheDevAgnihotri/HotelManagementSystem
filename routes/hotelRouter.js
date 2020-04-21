@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 var authenticate = require('../authenticate');
 
 const hotel = require('../models/hotel');
+const book = require('../models/booking');
 
 const hotelRouter = express.Router();
 
@@ -12,7 +13,6 @@ hotelRouter.use(bodyParser.json());
 hotelRouter.route('/')
 .get((req,res,next) => {
     hotel.find({})
-    .populate('room.Rooms_Occupied')
     .then((hotel) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
